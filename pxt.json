@@ -1,0 +1,15 @@
+{
+    "name": "museum-alarm",
+    "description": "Mission Impossible museum box alarm: light, motion, or either sensor.",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*"
+    },
+    "files": [
+        "main.ts",
+        "main.py",
+        "README.md"
+    ],
+    "preferredEditor": "pyprj"
+}
