@@ -3,9 +3,10 @@
 # Close the box during the 5-second countdown, then keep it still.
 
 # ---------- CHANGE THESE SETTINGS ----------
+# Replace BOTH None placeholders with your own numbers before running.
 MODE = "BOTH"             # "LIGHT", "MOTION", or "BOTH" (light OR motion)
-LIGHT_THRESHOLD = 50      # 0-255. Trigger above this light level.
-MOTION_THRESHOLD = 150    # milli-g. Trigger above this axis change.
+LIGHT_THRESHOLD: number = None  # (you need to work it out yourself!)
+MOTION_THRESHOLD: number = None  # (you need to work it out yourself!)
 CONFIRM_MS = 100          # Trigger must remain true for this long.
 SOUND_ENABLED = True      # V2 speaker; V1 can use a P0/GND speaker.
 RADIO_ENABLED = False     # Optional: needs a MakeCode radio receiver.
@@ -180,4 +181,7 @@ if RADIO_ENABLED:
     radio.set_transmit_power(4)
 # Prime the light sensor before calibration.
 input.light_level()
-basic.forever(run_tick)
+if LIGHT_THRESHOLD is None or MOTION_THRESHOLD is None:
+    basic.show_string("SET THRESHOLDS")
+else:
+    basic.forever(run_tick)
