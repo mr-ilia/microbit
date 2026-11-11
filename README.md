@@ -1,42 +1,45 @@
-# micro:bit classroom projects
+# Mission Impossible: Museum Box
 
-## Mission Impossible: Museum Box
+A micro:bit alarm that reacts when someone opens or moves the museum box.
 
-Build a museum alarm that reacts when someone opens or moves the box.
+## Import in the micro:bit app or MakeCode
 
-**[Open the museum alarm code](museum-alarm/museum_alarm.py)**  
-**[Open the plain-text code](https://raw.githubusercontent.com/mr-ilia/microbit/main/museum-alarm/museum_alarm.py)**
+1. Open **Create Code / MakeCode**, then **Import → Import URL**.
+2. Paste this repository link:
 
-### Copy the code
+   **https://github.com/mr-ilia/microbit**
 
-1. Open the code link above and use the **Copy raw file** button above the code. Alternatively, open the plain-text link, select all, and copy.
-2. Open the [micro:bit Python Editor](https://python.microbit.org/).
-3. Replace the starter code with the copied program, keeping its indentation.
-4. Transfer the program to your micro:bit using your usual classroom method.
+3. Choose **Go ahead!**. The museum alarm opens in **Python**.
+4. Edit the settings if needed, then **Download** and transfer to your micro:bit.
 
-This program uses **BBC micro:bit MicroPython**, not MakeCode Python.
+Import the whole repository link above, rather than a link to an individual file. The project files at the top of this repository are for **MakeCode Python**, the editor used by the micro:bit app.
 
-### Use your alarm
+## Use your alarm
 
 - Press **A** while disarmed to change mode: **L** = light, **M** = motion, **O** = light **OR** motion.
-- Press **B** to arm. Put the micro:bit in the box and close it during the five-second countdown.
-- Leave the box still for one more second while the sensor calibrates. A dim centre dot means it is armed.
-- Open or move the box to trigger the alarm. Press **B** to stop/reset it.
-- If **DARK** appears, close the box more fully and press B to try again. If **STILL** appears, keep the box still during calibration and try again.
+- Press **B** to arm. Place the micro:bit in the box and close it during the five-second countdown.
+- Keep the box still for one more second while it calibrates. A dim centre dot means it is armed.
+- Open or move the box to trigger the flashing, sounding alarm. Press **B** to stop/reset it. B also cancels the countdown or calibration.
+- If **DARK** appears letter by letter, close the box more fully and press B again. If **STILL** appears, keep the box still during calibration and try again.
 
-### Change the settings
+## Change the settings
 
-Edit the settings near the top of `museum_alarm.py`:
+Edit the settings near the top of [main.py](main.py), or directly in MakeCode's Python editor:
 
 | Setting | Starting value | What it controls |
 | --- | --- | --- |
 | `MODE` | `"BOTH"` | `"LIGHT"`, `"MOTION"`, or `"BOTH"` |
-| `LIGHT_THRESHOLD` | `50` | A higher light reading triggers the light alarm. |
-| `MOTION_THRESHOLD` | `150` | A larger change on any acceleration axis triggers the motion alarm. |
-| `SOUND_ENABLED` | `True` | Sound on/off; V2 has a built-in speaker. |
+| `LIGHT_THRESHOLD` | `50` | Light above this value triggers the light alarm. |
+| `MOTION_THRESHOLD` | `150` | Change on any acceleration axis above this value triggers the motion alarm. |
+| `CONFIRM_MS` | `100` | How long the trigger must stay true before the alarm sounds. |
+| `SOUND_ENABLED` | `True` | Sound on/off; V2 has a built-in speaker, V1 can use P0/GND. |
 
 In **BOTH** mode, either sensor can trigger the alarm: `light_alarm or motion_alarm`.
 
-Radio is disabled for this lesson. Leave `RADIO_ENABLED = False`; the optional receiver program is a later extension and is not included here.
+Radio is disabled for this lesson. Leave `RADIO_ENABLED = False`. The optional radio extension sends the string `ALARM` to a **MakeCode** receiver on group 8; a receiver is not included here. It does not use the original MicroPython radio packet format.
 
-The Python file is an unchanged copy of the supplied classroom program.
+## Original MicroPython version
+
+The unchanged classroom source is still available at [museum-alarm/museum_alarm.py](museum-alarm/museum_alarm.py), with a [plain-text copy](https://raw.githubusercontent.com/mr-ilia/microbit/main/museum-alarm/museum_alarm.py).
+
+Use that original file in the separate [micro:bit Python Editor](https://python.microbit.org/). It uses different APIs from MakeCode Python and should not be pasted into the app's MakeCode editor.
