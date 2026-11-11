@@ -4,9 +4,10 @@
 # After B: place board and close box during 5-second countdown; leave still.
 
 # ---------- CHANGE THESE SETTINGS ----------
+# Replace BOTH None placeholders with your own numbers before running.
 MODE = "BOTH"             # "LIGHT", "MOTION", or "BOTH" (light OR motion)
-LIGHT_THRESHOLD = 50      # 0-255. Alarm if light is GREATER than this.
-MOTION_THRESHOLD = 150    # milli-g. Alarm if any axis changes MORE than this.
+LIGHT_THRESHOLD = None  # (you need to work it out yourself!)
+MOTION_THRESHOLD = None  # (you need to work it out yourself!)
 CONFIRM_MS = 100          # Trigger must remain true for this long.
 SOUND_ENABLED = True      # V2: built-in speaker. V1: optional P0/GND speaker.
 RADIO_ENABLED = False     # Later extension: use museum_receiver.py too.
@@ -109,6 +110,9 @@ class MuseumAlarm:
 def run():
     from microbit import display, Image, button_a, button_b
     from microbit import accelerometer, running_time, sleep
+    if LIGHT_THRESHOLD is None or MOTION_THRESHOLD is None:
+        display.scroll("SET THRESHOLDS")
+        return
     if SOUND_ENABLED:
         import music
     if RADIO_ENABLED:
