@@ -2,12 +2,13 @@
 //  A: change mode while disarmed. B: arm, cancel or reset.
 //  Close the box during the 5-second countdown, then keep it still.
 //  ---------- CHANGE THESE SETTINGS ----------
+//  Replace BOTH None placeholders with your own numbers before running.
 let MODE = "BOTH"
 //  "LIGHT", "MOTION", or "BOTH" (light OR motion)
-let LIGHT_THRESHOLD = 50
-//  0-255. Trigger above this light level.
-let MOTION_THRESHOLD = 150
-//  milli-g. Trigger above this axis change.
+let LIGHT_THRESHOLD : number = null
+//  (you need to work it out yourself!)
+let MOTION_THRESHOLD : number = null
+//  (you need to work it out yourself!)
 let CONFIRM_MS = 100
 //  Trigger must remain true for this long.
 let SOUND_ENABLED = true
@@ -159,67 +160,78 @@ if (RADIO_ENABLED) {
 
 //  Prime the light sensor before calibration.
 input.lightLevel()
-basic.forever(function run_tick() {
-    
-    let now = input.runningTime()
-    let a_down = input.buttonIsPressed(Button.A)
-    let b_down = input.buttonIsPressed(Button.B)
-    let old_state = state
-    update_alarm(now, a_down && !was_a, b_down && !was_b, input.lightLevel(), [input.acceleration(Dimension.X), input.acceleration(Dimension.Y), input.acceleration(Dimension.Z)])
-    was_a = a_down
-    was_b = b_down
-    if (state == "ALARM" && old_state != "ALARM") {
-        alarm_since = now
-        next_radio = now
-    }
-    
-    //  One short display update keeps B responsive in every state.
-    let symbol = ""
-    if (state == "DISARMED") {
-        if (note != "") {
-            symbol = note.charAt(Math.idiv(now, 250) % (note.length + 2))
-        } else if (mode == "LIGHT") {
-            symbol = "L"
-        } else if (mode == "MOTION") {
-            symbol = "M"
-        } else {
-            symbol = "O"
+if (LIGHT_THRESHOLD === null || MOTION_THRESHOLD === null) {
+    basic.showString("SET THRESHOLDS")
+} else {
+    basic.forever(function run_tick() {
+        let now: number;
+        let a_down: boolean;
+        let b_down: boolean;
+        let old_state: string;
+        let symbol: string;
+        let should_sound: boolean;
+        
+        now = input.runningTime()
+        a_down = input.buttonIsPressed(Button.A)
+        b_down = input.buttonIsPressed(Button.B)
+        old_state = state
+        update_alarm(now, a_down && !was_a, b_down && !was_b, input.lightLevel(), [input.acceleration(Dimension.X), input.acceleration(Dimension.Y), input.acceleration(Dimension.Z)])
+        was_a = a_down
+        was_b = b_down
+        if (state == "ALARM" && old_state != "ALARM") {
+            alarm_since = now
+            next_radio = now
         }
         
-    } else if (state == "COUNTDOWN") {
-        symbol = "" + Math.max(1, Math.ceil((ARM_DELAY_MS - (now - since)) / 1000))
-    } else if (state == "ARMED") {
-        symbol = "."
-    } else if (state == "ALARM" && Math.idiv(now - alarm_since, 250) % 2 == 0) {
-        symbol = "X"
-    }
-    
-    if (symbol != shown) {
-        basic.clearScreen()
-        if (symbol == ".") {
-            led.plotBrightness(2, 2, 25)
-        } else if (symbol != "") {
-            basic.showString(symbol, 1)
+        //  One short display update keeps B responsive in every state.
+        symbol = ""
+        if (state == "DISARMED") {
+            if (note != "") {
+                symbol = note.charAt(Math.idiv(now, 250) % (note.length + 2))
+            } else if (mode == "LIGHT") {
+                symbol = "L"
+            } else if (mode == "MOTION") {
+                symbol = "M"
+            } else {
+                symbol = "O"
+            }
+            
+        } else if (state == "COUNTDOWN") {
+            symbol = "" + Math.max(1, Math.ceil((ARM_DELAY_MS - (now - since)) / 1000))
+        } else if (state == "ARMED") {
+            symbol = "."
+        } else if (state == "ALARM" && Math.idiv(now - alarm_since, 250) % 2 == 0) {
+            symbol = "X"
         }
         
-        shown = symbol
-    }
-    
-    let should_sound = state == "ALARM" && SOUND_ENABLED && (now - alarm_since) % 500 < 180
-    if (should_sound != tone_on) {
-        if (should_sound) {
-            music.ringTone(1200)
-        } else {
-            music.stopAllSounds()
+        if (symbol != shown) {
+            basic.clearScreen()
+            if (symbol == ".") {
+                led.plotBrightness(2, 2, 25)
+            } else if (symbol != "") {
+                basic.showString(symbol, 1)
+            }
+            
+            shown = symbol
         }
         
-        tone_on = should_sound
-    }
-    
-    if (state == "ALARM" && RADIO_ENABLED && now >= next_radio) {
-        radio.sendString("ALARM")
-        next_radio = now + 1000
-    }
-    
-    basic.pause(LOOP_MS)
-})
+        should_sound = state == "ALARM" && SOUND_ENABLED && (now - alarm_since) % 500 < 180
+        if (should_sound != tone_on) {
+            if (should_sound) {
+                music.ringTone(1200)
+            } else {
+                music.stopAllSounds()
+            }
+            
+            tone_on = should_sound
+        }
+        
+        if (state == "ALARM" && RADIO_ENABLED && now >= next_radio) {
+            radio.sendString("ALARM")
+            next_radio = now + 1000
+        }
+        
+        basic.pause(LOOP_MS)
+    })
+}
+
