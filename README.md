@@ -5,7 +5,7 @@
 Build a museum alarm that reacts when someone opens or moves the box.
 
 **[Open the museum alarm code](museum-alarm/museum_alarm.py)**  
-**[Open the plain-text code](https://raw.githubusercontent.com/iliavialyh/microbit/main/museum-alarm/museum_alarm.py)**
+**[Open the plain-text code](https://raw.githubusercontent.com/mr-ilia/microbit/main/museum-alarm/museum_alarm.py)**
 
 ### Copy the code
 
