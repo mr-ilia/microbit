@@ -2,8 +2,7 @@
 LIGHT_THRESHOLD = 50
 
 while True:
-    light = input.light_level()
-    if light > LIGHT_THRESHOLD:
+    if input.light_level() > LIGHT_THRESHOLD:
         basic.show_icon(IconNames.NO)
     else:
         basic.clear_screen()
